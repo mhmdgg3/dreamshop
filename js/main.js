@@ -28,9 +28,9 @@ fetch('products.json')
 
 
 
-            addToCart(selcetedProduct);
+            addToCart(selcetedProduct)
 
-            const allMatchingButtons = document.querySelectorAll(`.btn_add_card[data-id="${productId}"]`);
+            const allMatchingButtons = document.querySelectorAll(`.btn_add_card[data-id="${productId}"]`)
             allMatchingButtons.forEach(btn => {
                 btn.classList.add("active")
                 btn.innerHTML = `<i class="fa-solid fa-cart-shopping"></i> Item in card </span>
