@@ -1,3 +1,22 @@
+let category_nav_list = document.querySelector(".category_nav_list");
+
+function Open_Categ_list(){
+    category_nav_list.classList.toggle("active")
+
+}
+
+let nav_links = document.querySelector(".nav_links")
+
+function open_Menu() {
+    nav_links.classList.toggle("active")
+}
+
+
+var cart = document.querySelector('.cart');
+
+function open_close_cart() {
+    cart.classList.toggle("active")
+}
 
 fetch('products.json')
 .then(response => response.json())
@@ -77,3 +96,91 @@ function updateCart() {
 
         `
     })
+
+
+    const price_cart_total = document.querySelector('.price_cart_toral')
+    
+    const count_item_cart = document.querySelector('.Count_item_cart')
+
+    const count_item_header = document.querySelector('.count_item_header')
+    
+    price_cart_total.innerHTML = `$ ${total_Price}`
+
+    count_item_cart.innerHTML = total_count
+
+    count_item_header.innerHTML = total_count
+
+
+    const increaseButtons = document.querySelectorAll(".Increase_quantity")
+    const decreaseButtons = document.querySelectorAll(".decrease_quantity")
+
+    increaseButtons.forEach(button => {
+        button.addEventListener("click" , (event) =>{
+            const itemIndex = event.target.getAttribute("data-index")
+            increaseQuantity(itemIndex)
+        })
+    })
+
+
+    decreaseButtons.forEach(button => {
+        button.addEventListener("click" , (event) =>{
+            const itemIndex = event.target.getAttribute("data-index")
+            decreaseQuantity(itemIndex)
+        })
+    })
+
+
+
+    const delteButtons = document.querySelectorAll('.delete_item')
+    
+    delteButtons.forEach(button =>{
+        button.addEventListener('click' , (event) =>{
+            const itemIndex = event.target.closest('button').getAttribute('data-inex')
+            removeFromCart(itemIndex)
+        })
+    })
+
+}
+
+
+function increaseQuantity(index){
+    let cart = JSON.parse(localStorage.getItem('cart')) || []
+    cart[index].quantity += 1
+    localStorage.setItem('cart' , JSON.stringify(cart))
+    updateCart()
+}
+
+function decreaseQuantity(index){
+    let cart = JSON.parse(localStorage.getItem('cart')) || []
+
+    if (cart[index].quantity > 1){
+        cart[index].quantity -= 1
+    }
+ 
+    localStorage.setItem('cart' , JSON.stringify(cart))
+    updateCart()
+}
+
+
+
+
+
+function removeFromCart(index) {
+    const cart = JSON.parse(localStorage.getItem('cart')) || []
+
+    const removeProduct = cart.splice(index , 1)[0]
+    localStorage.setItem('cart', JSON.stringify(cart))
+    updateCart()
+    updateButoonsState(removeProduct.id)
+}
+
+
+function updateButoonsState(productId) {
+    const allMatchingButtons = document.querySelectorAll(`.btn_add_cart[data-id="${productId}"]`)
+    allMatchingButtons.forEach(button =>{
+        button.classList.remove('active');
+        button.innerHTML = `      <i class="fa-solid fa-cart-shopping"></i> add to cart`
+    })
+}
+
+updateCart()
